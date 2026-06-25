@@ -16,6 +16,8 @@ path = [
     "package-lock.json",
     "package.json",
     "CNAME",
+    "teams.yaml",
+    "repositories.yaml"
 ]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 SAP SE or an SAP affiliate company and IronCore contributors"
