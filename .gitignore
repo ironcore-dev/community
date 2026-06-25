@@ -1,0 +1,5 @@
+# This branch stores OpenTofu state files.
+# It is managed automatically — do not commit other files here.
+*
+!.gitignore
+!terraform.tfstate
