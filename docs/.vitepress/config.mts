@@ -23,15 +23,14 @@ export default withMermaid({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Home', link: '/../' },
-      { text: 'Overview', link: '/../overview/' },
+      { text: 'Home', link: 'https://ironcore.dev/' },
+      { text: 'Overview', link: 'https://ironcore.dev/overview/' },
       {
         text: 'Documentation',
         items: [
-          // TODO: fix path (works with trailing /, but this is an md file)
-          { text: 'Infrastructure as a Service', link: '/../iaas/getting-started' },
-          { text: 'Bare Metal Management', link: '/../baremetal/' },
-          { text: 'Network Automation', link: '/../network-automation/' },
+          { text: 'Infrastructure as a Service', link: 'https://ironcore.dev/iaas/getting-started' },
+          { text: 'Bare Metal Management', link: 'https://ironcore.dev/baremetal/' },
+          { text: 'Network Automation', link: 'https://ironcore.dev/network-automation/' },
         ]
       },
       { text: 'Community', link: '/' },
