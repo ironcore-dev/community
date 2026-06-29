@@ -17,7 +17,11 @@ path = [
     "package.json",
     "CNAME",
     "teams.yaml",
-    "repositories.yaml"
+    "repositories.yaml",
+    "automation/.gitignore",
+    "automation/.terraform.lock.hcl",
+    "automation/Makefile",
+    "automation/**/*.tf"
 ]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 SAP SE or an SAP affiliate company and IronCore contributors"
