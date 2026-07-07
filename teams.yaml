@@ -26,6 +26,7 @@
     - afritzler
     - defo89
     - hardikdr
+    - stefanhipfel
 
 - name: metal-contributors
   description: Contributors of IronCore Metal
@@ -37,7 +38,6 @@
     - gonzolino
     - maxmoehl
     - nagadeesh-nagaraja
-    - stefanhipfel
     - xkonni
 
 # Network Area
