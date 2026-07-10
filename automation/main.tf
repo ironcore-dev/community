@@ -3,7 +3,7 @@ locals {
   teams        = yamldecode(file("${path.module}/../teams.yaml"))
   repositories = yamldecode(file("${path.module}/../repositories.yaml"))
 
-  org_user_map = {for user in data.github_organization.org.users : user.login => user}
+  org_user_map = { for user in data.github_organization.org.users : user.login => user }
 }
 
 data "github_organization" "org" {
@@ -26,7 +26,7 @@ module "repositories" {
   source   = "./modules/github_repository"
   for_each = { for repo in local.repositories : repo.name => repo }
 
-  name           = each.value.name
+  name = each.value.name
 
   collaborator_teams = try(each.value.collaborators.teams, null)
 }

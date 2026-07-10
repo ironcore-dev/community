@@ -16,7 +16,7 @@ resource "github_organization_ruleset" "require_signatures" {
   }
 
   rules {
-    required_signatures     = true
+    required_signatures = true
 
     commit_message_pattern {
       name     = "Commit message must contain a Signed-off-by line"
@@ -36,7 +36,7 @@ resource "github_organization_ruleset" "default_release" {
       include = [
         "~DEFAULT_BRANCH",
         "refs/heads/release-*",
-        ]
+      ]
       exclude = []
     }
 
@@ -55,15 +55,15 @@ resource "github_organization_ruleset" "default_release" {
 
     pull_request {
       required_approving_review_count = 1
-      allowed_merge_methods           = [
+      allowed_merge_methods = [
         "rebase",
         "squash",
       ]
     }
-    
+
     required_status_checks {
       required_check {
-        context        = "DCO"
+        context = "DCO"
       }
     }
   }
