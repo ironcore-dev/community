@@ -455,6 +455,12 @@
     teams:
       - name: tsc
         permission: push
+      - name: iaas-maintainers
+        permission: triage
+      - name: metal-maintainers
+        permission: triage
+      - name: network-maintainers
+        permission: triage
 
 - name: steering
   description: The IronCore Technical Steering Committee
