@@ -4,8 +4,6 @@ STATE_DIR    := .state
 TOFU := tofu
 GIT  := git -C $(STATE_DIR)
 
-.PHONY: state-checkout state-commit state-status
-
 .state:
 	git worktree add $(STATE_DIR) $(STATE_BRANCH)
 
@@ -21,5 +19,6 @@ apply: .state
 	$(GIT)  commit --signoff --quiet --message "Update state $$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 	$(GIT)  push
 
+.PHONY: state-status
 state-status: .state
 	$(GIT) status
