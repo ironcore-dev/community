@@ -48,8 +48,9 @@ resource "github_organization_ruleset" "default_release" {
   }
 
   rules {
-    deletion         = true
-    non_fast_forward = true
+    deletion                = true
+    non_fast_forward        = true
+    required_linear_history = true
 
     pull_request {
       required_approving_review_count = 1
