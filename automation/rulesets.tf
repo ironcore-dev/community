@@ -41,6 +41,16 @@ resource "github_organization_ruleset" "default_release" {
       }
     }
 
+    required_workflows {
+      do_not_enforce_on_create = false
+
+      required_workflow {
+        repository_id = module.repositories["community"].repo_id
+        ref           = "main"
+        path          = ".github/workflows/reuse.yml"
+      }
+    }
+
     commit_message_pattern {
       name     = "Commit message must contain a Signed-off-by line"
       operator = "regex"
