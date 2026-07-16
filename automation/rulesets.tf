@@ -19,7 +19,7 @@ resource "github_organization_ruleset" "require_signatures" {
     commit_message_pattern {
       name     = "Commit message must contain a Signed-off-by line"
       operator = "regex"
-      pattern  = "(?m)Signed-off-by: .+ <.+@.+>"
+      pattern  = "(?m)Signed-off-by: [^<]+ <[^@]+@[^>]+>"
     }
   }
 }
