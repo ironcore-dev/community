@@ -9,7 +9,6 @@
       - kustomize-validation
       - buildAndPush (ceph-bucket-provider, ceph-bucket-provider)
       - buildAndPush (ceph-volume-provider, ceph-volume-provider)
-      - reuse
   collaborators:
     teams:
       - name: iaas-maintainers
@@ -32,7 +31,6 @@
     github-actions:
       - run
       - Run linter
-      - Run REUSE check
       - Run tests
       - Run validate kustomizations
   collaborators:
@@ -58,7 +56,6 @@
       - lint
       - check-codegen
       - test
-      - reuse
   collaborators:
     teams:
       - name: iaas-maintainers
@@ -74,7 +71,6 @@
       - kustomize-validation
       - lint
       - test
-      - reuse
   collaborators:
     teams:
       - name: iaas-maintainers
@@ -123,7 +119,6 @@
     github-actions:
       - lint
       - test
-      - reuse
   collaborators:
     teams:
       - name: iaas-maintainers
@@ -138,7 +133,6 @@
       - kustomize-validation
       - lint
       - run
-      - reuse
   collaborators:
     teams:
       - name: iaas-maintainers
@@ -153,7 +147,6 @@
       - lint
       - run
       - check-codegen
-      - reuse
   collaborators:
     teams:
       - name: iaas-maintainers
@@ -220,7 +213,6 @@
   description: k8s operator for IPAM
   required_status_checks:
     github-actions:
-      - reuse
       - lint
       - test
   collaborators:
@@ -262,7 +254,6 @@
       - Run tests
       - Run linter
       - Run code generation checks
-      - Run REUSE check
   collaborators:
     teams:
       - name: metal-maintainers
@@ -313,7 +304,6 @@
       - kustomize-validation
       - lint
       - test
-      - reuse
   collaborators:
     teams:
       - name: network-maintainers
@@ -354,9 +344,6 @@
 # Multi-Area: IaaS + Metal
 - name: os-images
   description: Automates the publication of OS images as OCI artifacts
-  required_status_checks:
-    github-actions:
-      - reuse
   collaborators:
     teams:
       - name: iaas-maintainers
@@ -375,7 +362,6 @@
     github-actions:
       - lint
       - test
-      - reuse
   collaborators:
     teams:
       - name: iaas-maintainers
