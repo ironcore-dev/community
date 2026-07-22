@@ -311,6 +311,10 @@
         permission: push
       - name: network-contributors
         permission: triage
+      - name: iaas-maintainers
+        permission: push
+      - name: iaas-contributors
+        permission: triage
 
 - name: metalbond
   description: Route reflector for IronCore Infrastructure Overlay Network
