@@ -91,6 +91,7 @@ variable "rulesets" {
 
       required_status_checks = optional(object({
         strict_required_status_checks_policy = optional(bool)
+        do_not_enforce_on_create             = optional(bool)
         required_check = list(object({
           context        = string
           integration_id = optional(number)

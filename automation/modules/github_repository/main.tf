@@ -56,6 +56,7 @@ resource "github_repository_ruleset" "ruleset" {
       for_each = each.value.rules.required_status_checks != null ? [each.value.rules.required_status_checks] : []
       content {
         strict_required_status_checks_policy = required_status_checks.value.strict_required_status_checks_policy
+        do_not_enforce_on_create             = required_status_checks.value.do_not_enforce_on_create
 
         dynamic "required_check" {
           for_each = required_status_checks.value.required_check

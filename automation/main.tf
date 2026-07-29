@@ -55,6 +55,8 @@ module "repositories" {
       }
       rules = {
         required_status_checks = {
+          do_not_enforce_on_create = true
+
           required_check = flatten([
             for app_slug, contexts in each.value.required_status_checks : [
               for context in contexts : {

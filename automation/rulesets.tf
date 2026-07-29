@@ -36,6 +36,8 @@ resource "github_organization_ruleset" "default_release" {
     }
 
     required_status_checks {
+      do_not_enforce_on_create = true
+
       required_check {
         context        = "DCO"
         integration_id = data.github_app.apps["dco"].id
@@ -43,7 +45,7 @@ resource "github_organization_ruleset" "default_release" {
     }
 
     required_workflows {
-      do_not_enforce_on_create = false
+      do_not_enforce_on_create = true
 
       required_workflow {
         repository_id = module.repositories["community"].repo_id
