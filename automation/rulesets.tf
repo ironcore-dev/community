@@ -23,10 +23,10 @@ resource "github_organization_ruleset" "default_release" {
 
   rules {
     deletion                = true
+    non_fast_forward        = true
     # We can not enforce linear history on repos that have merge commits in their history.
     # Enforcing it will block creation of release branches.
-    non_fast_forward        = false
-    required_linear_history = true
+    required_linear_history = false
 
     pull_request {
       required_approving_review_count = 1
