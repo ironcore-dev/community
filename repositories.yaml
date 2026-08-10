@@ -347,6 +347,18 @@
         permission: triage
 
 # Multi-Area: IaaS + Metal
+- name: kbake
+  description: Declaritively build linux kernels 🐧
+  collaborators:
+    teams:
+      - name: iaas-maintainers
+        permission: push
+      - name: iaas-contributors
+        permission: triage
+      - name: metal-maintainers
+        permission: push
+      - name: metal-contributors
+        permission: triage
 - name: os-images
   description: Automates the publication of OS images as OCI artifacts
   collaborators:
