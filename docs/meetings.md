@@ -12,7 +12,7 @@ Visit the [community calendar](https://zoom-lfx.platform.linuxfoundation.org/mee
 ### Community Call
 
 - **Focus:** design and implementation. Bring proposals, design reviews, and implementation discussions.
-- **Cancellation:** if the agenda is empty a few hours before the meeting, the call is canceled. Add your topic to the agenda ahead of time to keep it on the calendar.
+- **Cancellation:** the call is canceled if the agenda is still empty the morning of the meeting. Add your topic to the agenda ahead of time to keep it on the calendar.
 - **Meeting series:**
   - IronCore IaaS
   - IronCore Metal
