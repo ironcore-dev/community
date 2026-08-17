@@ -9,6 +9,17 @@ If you'd like to bring your own topic, feel free to add it to the [agenda](#meet
 
 Visit the [community calendar](https://zoom-lfx.platform.linuxfoundation.org/meetings/ironcore?view=week) for upcoming meetings.
 
+### IronCore IaaS Community Call
+
+- **Focus:** design and implementation. Bring proposals, design reviews, and implementation discussions.
+- **Cancellation:** if the agenda is empty a few hours before the meeting, the call is canceled. Add your topic to the agenda ahead of time to keep it on the calendar.
+
+### IronCore IaaS Office Hour
+
+- **Focus:** open to everyone. Bring general questions, usage questions, and problems you're running into.
+- **Format:** maintainers join for the first 5 minutes. If no one shows up, the meeting is closed early.
+
+
 ## Meeting Agenda
 
 The agenda for the next meetings is maintained in our [Slack workspace](https://join.slack.com/t/ironcore-dev/shared_invite/zt-3o0qo3j90-pbqV0io1B~Z~LqeAp4n2Vg).
