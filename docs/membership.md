@@ -1,4 +1,4 @@
-# Community Membership
+# Membership
 
 The IronCore community recognizes and celebrates regular contributors by inviting
 them into formal membership roles. If you contribute to repositories in the
