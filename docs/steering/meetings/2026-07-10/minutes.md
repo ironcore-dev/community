@@ -1,4 +1,4 @@
-# IronCore Technical Steering Committee (TSC) Meeting Notes - 2026-06-12
+# IronCore Technical Steering Committee (TSC) Meeting Notes - 2026-07-10
 
 ## Attendance
 
