@@ -1,4 +1,5 @@
 import { withMermaid } from "vitepress-plugin-mermaid";
+import taskLists from "markdown-it-task-lists";
 import { fileURLToPath, URL } from 'node:url'
 
 // https://vitepress.dev/reference/site-config
@@ -6,6 +7,7 @@ export default withMermaid({
   title: "IronCore Project",
   description: "IronCore Project",
   base: '/community/',
+  srcExclude: ['**/steering/meetings/*-template.md'], // templates live on GitHub, index links out
   head: [
       ['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/ironcore-dev/ironcore/refs/heads/main/docs/assets/logo_borderless.svg' }],
       ['meta', {property: 'og:type', content: 'website'}],
@@ -26,6 +28,11 @@ export default withMermaid({
         },
       ]
     }
+  },
+  markdown: {
+    config: (md) => {
+      md.use(taskLists);
+    },
   },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -68,6 +75,15 @@ export default withMermaid({
             { text: 'Release Process', link: '/release-process' },
             { text: 'Meetings', link: '/meetings' },
             { text: 'Membership', link: '/membership' },
+          ],
+        },
+        {
+          text: 'Steering Committee',
+          items: [
+            { text: 'Overview', link: '/steering/' },
+            { text: 'Charter', link: '/steering/charter' },
+            { text: 'Members', link: '/steering/members' },
+            { text: 'Meetings', link: '/steering/meetings' },
           ],
         },
         {
