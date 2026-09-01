@@ -27,8 +27,8 @@ The Chair is elected by the TSC, presides over its meetings, and serves as the p
 | Maximilian Moehl | SAP SE | [maxmoehl](https://github.com/maxmoehl)
 | Benjamin Alpert | T-Systems | [balpert89](https://github.com/balpert89)
 | Florin Peter | T-Systems | [FlorinPeter](https://github.com/FlorinPeter)
-| Filipp Akinfiev | Clyso | 
-| Christian Schupfner | Clyso |
+| Filipp Akinfiev | Clyso |  [fa-at-pulsit](https://github.com/fa-at-pulsit)
+| Christian Schupfner | Clyso | [schucly](https://github.com/schucly)
 
 ## Emeritus Members
 | Name | Organization | Github Handle |
