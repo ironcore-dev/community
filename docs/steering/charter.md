@@ -58,7 +58,7 @@ Quorum for TSC meetings requires at least fifty percent of all voting members of
 
 Except as provided in Section [Intellectual property policy](#intellectual-property-policy).c and [Amendments](#amendments), decisions by vote at a meeting require a majority vote of those in attendance, provided quorum is met. Decisions made by electronic vote without a meeting require a majority vote of all voting members of the TSC.
 
-In the event a vote cannot be resolved by the TSC, TSC goes to TAC to resolve it.
+In the event a vote cannot be resolved by the TSC, TSC goes to the Technical Advisory Council (TAC) to resolve it.
 
 
 ## Compliance with Policies
@@ -91,7 +91,7 @@ The Project will:
 
 a. Collaborators acknowledge that the copyright in all new contributions will be retained by the copyright holder as independent works of authorship and that no contributor or copyright holder will be required to assign copyrights to the Project.
 
-b. Except as described in Section 7.c., all contributions to the Project are subject to the following:
+b. Except as described in Section [Intellectual Property Policy](#intellectual-property-policy).c, all contributions to the Project are subject to the following:
 - i. All new inbound code contributions to the Project must be made using [Apache 2.0 License](https://github.com/ironcore-dev/community/blob/main/LICENSES/Apache-2.0.txt) or MIT (Project Licenses)
 - ii. All new inbound code contributions must also be accompanied by a Developer Certificate of Origin (http://developercertificate.org) sign-off in the source code system that is submitted through a TSC-approved contribution process which will bind the authorized contributor and, if not self-employed, their employer to the applicable license;
 - iii. All outbound code will be made available under the Project Licenses
