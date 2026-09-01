@@ -17,7 +17,7 @@ The **scope** of the Project includes collaborative development under the Projec
 
 The Technical Steering Committee (the “TSC”) will be responsible for all technical oversight of the open source Project.
 
-The initial TSC voting members are individuals listed in [OWNERS.md](members.md) file. The TSC may choose an alternative approach for determining the voting members of the TSC, and any such alternative approach will be documented in the [CONTRIBUTING.md](/contributing) file.
+The initial TSC voting members are individuals listed in [members.md](members.md) file. The TSC may choose an alternative approach for determining the voting members of the TSC, and any such alternative approach will be documented in the [CONTRIBUTING.md](/contributing) file.
 
 At the inception of the project, details concerning organization and decision making of sub-projects will be documented by the TSC in a TSC or similar repository maintained for this purpose.
 
