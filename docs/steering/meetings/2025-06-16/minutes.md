@@ -174,7 +174,7 @@ Benjamin Alpert (0 votes)
 
 ## Antitrust Policy Notice
 
-	Linux Foundation meetings involve participation by industry competitors, and it is the 
+Linux Foundation meetings involve participation by industry competitors, and it is the 
 	intention of the Linux Foundation to conduct all of its activities in accordance with applicable 
 	antitrust and competition laws. It is therefore extremely important that attendees adhere to 
 	meeting agendas, and be aware of, and not participate in, any activities that are prohibited 
