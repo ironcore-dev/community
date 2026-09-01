@@ -13,7 +13,7 @@ The Chair is elected by the TSC, presides over its meetings, and serves as the p
 
 | Name | Assumed Chair       |
 | ---- |---------------------|
-| Andreas Fritzler | Jun - May 2025      |
+| Andreas Fritzler | Jun 2025 - May 2026 |
 | Andreas Fritzler | Jun 2026 - May 2027 |
 
 ## All Members
