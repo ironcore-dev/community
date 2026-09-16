@@ -6,6 +6,13 @@ data "github_repository" "repository" {
 resource "github_repository_collaborators" "collaborators" {
   repository = data.github_repository.repository.name
 
+  dynamic "ignore_team" {
+    for_each = var.ignored_teams
+    content {
+      team_id = ignore_team.value
+    }
+  }
+
   dynamic "team" {
     for_each = var.collaborator_teams
     content {

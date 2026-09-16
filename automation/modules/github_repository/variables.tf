@@ -62,6 +62,13 @@ variable "collaborator_teams" {
   }
 }
 
+variable "ignored_teams" {
+  description = "List of team names to ignore when managing repository collaborators"
+  type        = list(string)
+  default     = []
+  nullable    = false
+}
+
 variable "rulesets" {
   description = "List of repository rulesets to apply"
   type = list(object({

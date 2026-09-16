@@ -6,6 +6,9 @@ locals {
   org_user_map = { for user in data.github_organization.org.users : user.login => user }
   org_role_map = { for role in data.github_organization_roles.all.roles : role.name => role }
 
+  # Teams with org_roles are managed outside of repository collaborators and must be ignored
+  ignored_teams = [for team in local.teams : team.name if length(try(team.org_roles, [])) > 0]
+
   # List of app slugs used by required_status_checks in repositories. Used to fetch app IDs.
   app_slugs = toset(concat(
     ["dco"], # The dco slug is needed for the 'require_signatures' org-wide ruleset
@@ -44,6 +47,8 @@ module "repositories" {
   name = each.value.name
 
   collaborator_teams = try(each.value.collaborators.teams, null)
+
+  ignored_teams = local.ignored_teams
 
   # If repos have required status checks, build a ruleset for them.
   rulesets = length(try(each.value.required_status_checks, {})) == 0 ? [] : [
