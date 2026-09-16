@@ -73,3 +73,22 @@
     - maxmoehl
     - mTarabyte
     # - schucly
+
+- name: project-managers
+  description: Manage and triage issues in the whole org
+  org_roles:
+    - all_repo_triage
+  members:
+    - adracus
+    - afritzler
+    - byteocean
+    - damyan
+    - friegger
+    - gonzolino
+    - Giluerre
+    - hardikdr
+    - lukasfrank
+    - maxmoehl
+    - mkalcok
+    - peanball
+    - SamiraBriongos
