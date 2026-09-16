@@ -45,3 +45,10 @@ variable "members" {
     error_message = "Each member role must be either 'member' or 'maintainer'."
   }
 }
+
+variable "org_roles" {
+  description = "Map of organization role name to role_id to assign to this team"
+  type        = map(number)
+  default     = {}
+  nullable    = false
+}
