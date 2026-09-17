@@ -1,0 +1,119 @@
+name: GitHub Org Automation Plan
+
+on:
+  pull_request:
+    paths:
+      - "automation/**"
+      - "teams.yaml"
+      - "repositories.yaml"
+      - ".github/workflows/tofu-plan.yml"
+
+permissions:
+  contents: read
+  pull-requests: write # needed to comment on the PR
+
+# Make sure only a single plan runs at a time per PR
+concurrency:
+  group: tofu-plan-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      # Fail fast if no github token is available (e.g. PRs from a fork)
+      - name: check github token
+        env:
+          ORG_GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+        run: |
+          if [ -z "$ORG_GITHUB_TOKEN" ]; then
+            echo "::error::secret ORG_GITHUB_TOKEN is not available (e.g. PR from a fork)"
+            exit 1
+          fi
+
+      - name: check out code
+        uses: actions/checkout@v7
+
+      # State lives on the "state" branch.
+      - name: check out state
+        working-directory: automation
+        run: |
+          git fetch --depth=1 origin state:state
+          git worktree add .state state
+
+      - name: set up tofu
+        uses: opentofu/setup-opentofu@v2
+        with:
+          tofu_wrapper: false
+
+      - name: tofu init
+        working-directory: automation
+        run: tofu init -input=false
+
+      - name: tofu plan
+        id: plan
+        working-directory: automation
+        env:
+          # github provider auth: the workflow token can't read org data,
+          # so plan needs a PAT with org read access.
+          GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+        run: |
+          set +e
+          tofu plan -detailed-exitcode -no-color -input=false -out=plan.tfplan 2>&1 | tee run.log
+          code=${PIPESTATUS[0]}
+          if [ "$code" -eq 1 ]; then
+            mv run.log plan.txt
+          else
+            tofu show -no-color plan.tfplan > plan.txt
+          fi
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+
+      - name: comment plan on PR
+        uses: actions/github-script@v9
+        env:
+          PLAN_EXIT_CODE: ${{ steps.plan.outputs.exit_code }}
+        with:
+          script: |
+            const fs = require("fs");
+            const plan = fs.readFileSync("automation/plan.txt", "utf8");
+
+            const marker = "<!-- tofu-plan -->";
+            const status = { "0": "✅ No changes", "1": "❌ Failed", "2": "🔄 Changes pending" }[process.env.PLAN_EXIT_CODE] ?? "❓ Unknown";
+
+            // GitHub comments are limited to 65536 characters.
+            const maxLen = 60000;
+            const trimmed = plan.length > maxLen
+              ? "… (truncated, see workflow logs for the full plan)\n" + plan.slice(-maxLen)
+              : plan;
+
+            const body = `${marker}\n### Plan: ${status}\n` +
+              `<details><summary>Show plan</summary>\n\n` +
+              `\`\`\`terraform\n${trimmed}\n\`\`\`\n</details>\n\n` +
+              `Workflow: [${process.env.GITHUB_RUN_ID}](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.user.type === "Bot" && c.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+      - name: fail on plan error
+        if: steps.plan.outputs.exit_code == '1'
+        run: exit 1
