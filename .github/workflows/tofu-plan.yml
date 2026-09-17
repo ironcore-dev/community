@@ -1,0 +1,42 @@
+name: Check GitHub organization changes
+
+on:
+  pull_request:
+    paths:
+      - "automation/**"
+      - "teams.yaml"
+      - "repositories.yaml"
+      - ".github/workflows/tofu-plan.yml"
+
+permissions:
+  contents: read
+  pull-requests: write # needed to comment on the PR
+
+# Make sure only a single plan runs at a time per PR
+concurrency:
+  group: tofu-plan-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out code
+        uses: actions/checkout@v7
+
+      - name: set up tofu
+        uses: opentofu/setup-opentofu@v2
+        with:
+          tofu_wrapper: false
+
+      - name: tofu formatting check
+        working-directory: automation
+        run: tofu fmt -check -recursive -diff
+
+      - name: tofu init
+        working-directory: automation
+        run: tofu init -backend=false -input=false
+
+      - name: tofu validate
+        working-directory: automation
+        run: tofu validate
