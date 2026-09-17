@@ -3,7 +3,7 @@
   description: Ceph provider implementation of the IronCore storage interface
   required_status_checks:
     github-actions:
-      - integration-tests
+      - integration-tests (tentacle)
       - lint
       - run
       - kustomize-validation
