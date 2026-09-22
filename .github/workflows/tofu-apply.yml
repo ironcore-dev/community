@@ -1,0 +1,162 @@
+name: GitHub Org Automation Apply
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "automation/**"
+      - "teams.yaml"
+      - "repositories.yaml"
+      - ".github/workflows/tofu-apply.yml"
+  workflow_dispatch:
+
+# Only run a single Apply workflow at a time.
+concurrency:
+  group: tofu-apply
+
+jobs:
+  plan:
+    name: Tofu Plan
+    runs-on: ubuntu-latest
+    outputs:
+      exitcode: ${{ steps.plan.outputs.exitcode }}
+    permissions:
+      contents: read
+    steps:
+      - name: Check GitHub token
+        env:
+          ORG_GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+        run: |
+          if [ -z "$ORG_GITHUB_TOKEN" ]; then
+            echo "::error::secret ORG_GITHUB_TOKEN is not available"
+            exit 1
+          fi
+
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      # State lives on the "state" branch.
+      - name: Check out state
+        working-directory: automation
+        run: |
+          git fetch --depth=1 origin state:state
+          git worktree add .state state
+
+      - name: Set up tofu
+        uses: opentofu/setup-opentofu@v2
+
+      - name: Init tofu
+        working-directory: automation
+        run: tofu init -input=false
+
+      - name: Run tofu plan
+        id: plan
+        working-directory: automation
+        env:
+          # github provider auth: the workflow token can't read org data,
+          # so plan needs a PAT with org read access.
+          GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+        run: tofu plan -detailed-exitcode -no-color -input=false -out=plan.tfplan
+        continue-on-error: true
+
+      - name: Show tofu plan
+        id: show
+        working-directory: automation
+        run: tofu show -no-color plan.tfplan
+        continue-on-error: true
+
+      - name: Plan summary
+        run: |
+          if [ $TF_EXITCODE == 1 ]; then
+            # Make sure the tofu error from stderr uses URL-encoded characters as
+            # expected by the github annotation parser.
+            error_message="${TF_STDERR//'%'/'%25'}"
+            error_message="${error_message//$'\n'/'%0A'}"
+            error_message="${error_message//$'\r'/'%0D'}"
+            echo "::error title=Tofu Plan Failed::$error_message"
+            exit 1
+          else
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            echo "$TF_PLAN" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
+        env:
+          TF_PLAN: ${{ steps.show.outputs.stdout }}
+          TF_EXITCODE: ${{ steps.plan.outputs.exitcode }}
+          TF_STDERR: ${{ steps.plan.outputs.stderr }}
+
+      - name: Upload tofu plan
+        if: steps.plan.outputs.exitcode == '2'
+        uses: actions/upload-artifact@v7
+        with:
+          name: tofu-plan
+          path: |
+            automation/plan.tfplan
+          retention-days: 7
+
+  apply:
+    name: Tofu Apply
+    needs: plan
+    # Only run apply if changes were detected during plan
+    if: needs.plan.outputs.exitcode == '2'
+    # Apply runs in protected environment with required reviewers
+    environment: github-org
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # needed to push the updated state branch
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      # State lives on the "state" branch.
+      - name: Check out state
+        working-directory: automation
+        run: |
+          git fetch --depth=1 origin state:state
+          git worktree add .state state
+
+      - name: Set up tofu
+        uses: opentofu/setup-opentofu@v2
+
+      - name: Init tofu
+        working-directory: automation
+        run: tofu init -input=false
+
+      - name: Download tofu plan
+        uses: actions/download-artifact@v7
+        with:
+          name: tofu-plan
+          path: automation
+
+      - name: Run tofu apply
+        id: apply
+        working-directory: automation
+        env:
+          GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+        run: tofu apply -input=false -no-color plan.tfplan
+
+      # Always push state, even if apply failed
+      - name: Push state
+        if: always()
+        working-directory: automation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git -C .state add --update
+          if git -C .state diff --cached --quiet; then
+            echo "no state changes to push"
+            exit 0
+          fi
+
+          git -C .state commit --signoff --quiet --message "Update state $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          push_output=$(git -C .state push origin state 2>&1)
+          if [ $? -eq 0 ]; then
+            exit 0
+          fi
+          push_output="${push_output//'%'/'%25'}"
+          push_output="${push_output//$'\n'/'%0A'}"
+          push_output="${push_output//$'\r'/'%0D'}"
+          echo "::error title=Failed to push state::$push_output"
+          exit 1
