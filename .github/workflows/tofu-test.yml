@@ -1,0 +1,29 @@
+name: GitHub Org Automation Test 
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out code
+        uses: actions/checkout@v7
+
+      - name: set up tofu
+        uses: opentofu/setup-opentofu@v2
+
+      - name: tofu formatting check
+        working-directory: automation
+        run: tofu fmt -check -recursive -diff
+
+      - name: tofu init
+        working-directory: automation
+        run: tofu init -input=false -backend=false
+
+      - name: tofu validate
+        working-directory: automation
+        run: tofu validate
