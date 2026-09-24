@@ -84,6 +84,7 @@ export default withMermaid({
             { text: 'Overview', link: '/steering/' },
             { text: 'Charter', link: '/steering/charter' },
             { text: 'Members', link: '/steering/members' },
+            { text: 'TSC Structure', link: '/steering/tsc-structure' },
             { text: 'Meetings', link: '/steering/meetings' },
           ],
         },
