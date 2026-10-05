@@ -448,6 +448,9 @@
 
 - name: community
   description: Community engagement rules repository
+  required_status_checks:
+    github-actions:
+      - Tofu Check
   collaborators:
     teams:
       - name: tsc
