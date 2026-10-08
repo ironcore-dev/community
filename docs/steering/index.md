@@ -9,6 +9,7 @@ The IronCore organization and its projects are an open-source standard, contribu
 | Governance Document        | Purpose                                            |
 |----------------------------|----------------------------------------------------|
 | [Members](members)         | Maintainers & Technical Steering Committee Members |
+| [TSC Structure](tsc-structure) | Topic areas, ownership roles and TSC representation |
 | [Project Charter](charter) | Structure, purpose and organization of the project |
 | [Contributing](/contributing) | General contribution guidelines                 |
 
