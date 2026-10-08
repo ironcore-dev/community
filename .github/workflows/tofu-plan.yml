@@ -7,6 +7,7 @@ on:
       - "teams.yaml"
       - "repositories.yaml"
       - ".github/workflows/tofu-plan.yml"
+      - ".github/workflows/tofu-apply.yml"
 
 permissions:
   contents: read
