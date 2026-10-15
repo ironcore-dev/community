@@ -40,15 +40,6 @@
       - name: iaas-contributors
         permission: triage
 
-- name: FeOS
-  description: A Rust-based init system for Linux, specifically tailored for secure and efficient management of containers, VMs, and MicroVMs in clustered server and multi-tenant environments.
-  collaborators:
-    teams:
-      - name: iaas-maintainers
-        permission: push
-      - name: iaas-contributors
-        permission: triage
-
 - name: gardener-extension-provider-ironcore
   description: Gardener extension controller for the IronCore cloud provider
   required_status_checks:
