@@ -317,6 +317,21 @@
       - name: network-contributors
         permission: triage
 
+- name: fabric
+  description: Declarative configuration of network nodes
+  required_status_checks:
+    github-actions:
+      - check-codegen
+      - kustomize-validation
+      - lint
+      - test
+  collaborators:
+    teams:
+      - name: network-maintainers
+        permission: push
+      - name: network-contributors
+        permission: triage
+
 - name: ironcore-net
   description: Provider specific implementation of ironcore network types
   required_status_checks:
