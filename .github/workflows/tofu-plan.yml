@@ -1,21 +1,19 @@
 name: GitHub Org Automation Plan
 
 on:
-  pull_request:
+  pull_request_target:
+    branches:
+      - main
     paths:
-      - "automation/**"
       - "teams.yaml"
       - "repositories.yaml"
-      - ".github/workflows/tofu-plan.yml"
-      - ".github/workflows/tofu-apply.yml"
 
 permissions:
   contents: read
   pull-requests: write # needed to comment on the PR
 
-# Make sure only a single plan runs at a time per PR
 concurrency:
-  group: tofu-plan-${{ github.head_ref }}
+  group: tofu-plan-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
@@ -25,15 +23,43 @@ jobs:
     steps:
       - name: Check GitHub token
         env:
-          ORG_GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+          # Repository secret covering only the permissions necessary to refresh
+          # the state.
+          TOFU_PLAN_TOKEN: ${{ secrets.TOFU_PLAN_TOKEN }}
         run: |
-          if [ -z "$ORG_GITHUB_TOKEN" ]; then
-            echo "::error::secret ORG_GITHUB_TOKEN is not available (e.g. PR from a fork)"
+          if [ -z "$TOFU_PLAN_TOKEN" ]; then
+            echo "::error::secret TOFU_PLAN_TOKEN is not available"
             exit 1
           fi
 
-      - name: Check out code
+      # Reminder: this checks out the base branch because we run with
+      # pull_request_target.
+      - name: Check out base branch
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Pick changes to configuration
+        # This script merges the PR FETCH_HEAD with main (which is our HEAD).
+        # GitHub also offers a merge ref as well as variable pointing at the
+        # merge commit SHA but those are known to sometimes be delayed or
+        # outdated so merge the branches ourselves.
+        # Once we've done that, we pick the two data file changes from the
+        # merged tree to ensure the PR is unable to inject any foreign code to
+        # try and extract any secrets.
+        # Since the files are cat-ed from a blob any PRs trying to symlink to
+        # /proc/self/environ or similar will fail as the cat will just write the
+        # link target to a text file.
+        run: |
+          git fetch origin "pull/${{ github.event.pull_request.number }}/head"
+          if ! tree=$(git merge-tree --write-tree HEAD FETCH_HEAD); then
+            echo "::error::PR does not cleanly merge"
+            exit 1
+          fi
+          for f in teams.yaml repositories.yaml; do
+            git cat-file blob "$tree:$f" > "$f"
+          done
 
       # State lives on the "state" branch.
       - name: Check out state
@@ -54,8 +80,8 @@ jobs:
         working-directory: automation
         env:
           # github provider auth: the workflow token can't read org data,
-          # so plan needs a PAT with org read access.
-          GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+          # so plan needs a token with org read access.
+          GITHUB_TOKEN: ${{ secrets.TOFU_PLAN_TOKEN }}
         run: tofu plan -detailed-exitcode -no-color -input=false -out=plan.tfplan
         continue-on-error: true
 
@@ -72,7 +98,6 @@ jobs:
           TF_PLAN: ${{ steps.show.outputs.stdout}}
         with:
           script: |
-            const fs = require("fs");
             const plan = process.env.TF_PLAN;
 
             const marker = "<!-- tofu-plan -->";
@@ -114,7 +139,7 @@ jobs:
 
       - name: Plan summary
         run: |
-          if [ $TF_EXITCODE == 1 ]; then
+          if [ "$TF_EXITCODE" == 1 ]; then
             # Make sure the tofu error from stderr uses URL-encoded characters as
             # expected by the github annotation parser.
             error_message="${TF_STDERR//'%'/'%25'}"
