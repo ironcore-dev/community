@@ -13,9 +13,8 @@ permissions:
   contents: read
   pull-requests: write # needed to comment on the PR
 
-# Make sure only a single plan runs at a time per PR
 concurrency:
-  group: tofu-plan-${{ github.head_ref }}
+  group: tofu-plan-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
@@ -25,10 +24,12 @@ jobs:
     steps:
       - name: Check GitHub token
         env:
-          ORG_GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+          # Repository secret covering only the permissions necessary to refresh
+          # the state.
+          TOFU_PLAN_TOKEN: ${{ secrets.TOFU_PLAN_TOKEN }}
         run: |
-          if [ -z "$ORG_GITHUB_TOKEN" ]; then
-            echo "::error::secret ORG_GITHUB_TOKEN is not available (e.g. PR from a fork)"
+          if [ -z "$TOFU_PLAN_TOKEN" ]; then
+            echo "::error::secret TOFU_PLAN_TOKEN is not available (e.g. PR from a fork)"
             exit 1
           fi
 
@@ -54,8 +55,8 @@ jobs:
         working-directory: automation
         env:
           # github provider auth: the workflow token can't read org data,
-          # so plan needs a PAT with org read access.
-          GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+          # so plan needs a token with org read access.
+          GITHUB_TOKEN: ${{ secrets.TOFU_PLAN_TOKEN }}
         run: tofu plan -detailed-exitcode -no-color -input=false -out=plan.tfplan
         continue-on-error: true
 

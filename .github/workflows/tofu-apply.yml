@@ -26,10 +26,12 @@ jobs:
     steps:
       - name: Check GitHub token
         env:
-          ORG_GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+          # Repository secret covering only the permissions necessary to refresh
+          # the state.
+          TOFU_PLAN_TOKEN: ${{ secrets.TOFU_PLAN_TOKEN }}
         run: |
-          if [ -z "$ORG_GITHUB_TOKEN" ]; then
-            echo "::error::secret ORG_GITHUB_TOKEN is not available"
+          if [ -z "$TOFU_PLAN_TOKEN" ]; then
+            echo "::error::secret TOFU_PLAN_TOKEN is not available"
             exit 1
           fi
 
@@ -55,8 +57,8 @@ jobs:
         working-directory: automation
         env:
           # github provider auth: the workflow token can't read org data,
-          # so plan needs a PAT with org read access.
-          GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+          # so plan needs a read-only token with org read access.
+          GITHUB_TOKEN: ${{ secrets.TOFU_PLAN_TOKEN }}
         run: tofu plan -detailed-exitcode -no-color -input=false -out=plan.tfplan
         continue-on-error: true
 
@@ -134,7 +136,9 @@ jobs:
         id: apply
         working-directory: automation
         env:
-          GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+          # Environment secret of the github-org environment covering the
+          # permissions necessary to carry out the plan.
+          GITHUB_TOKEN: ${{ secrets.TOFU_APPLY_TOKEN }}
         run: tofu apply -input=false -no-color plan.tfplan
 
       # Always push state, even if apply failed
