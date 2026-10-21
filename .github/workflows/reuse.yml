@@ -1,3 +1,8 @@
+# DO NOT DELETE THIS WORKFLOW
+#
+# This workflow is referenced by our organization-wide ruleset to enforce REUSE
+# compliance across all repositories.
+
 name: REUSE Compliance Check
 
 on: pull_request
