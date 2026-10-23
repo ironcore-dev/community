@@ -321,10 +321,10 @@
   description: Declarative configuration of network nodes
   required_status_checks:
     github-actions:
-      - check-codegen
-      - kustomize-validation
-      - lint
-      - test
+      - Run code generation checks
+      - Run validate kustomizations
+      - Run linter
+      - Run tests
   collaborators:
     teams:
       - name: network-maintainers
