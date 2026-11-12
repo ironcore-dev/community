@@ -6,7 +6,7 @@ resource "github_team" "team" {
 }
 
 resource "github_team_members" "members" {
-  team_id = github_team.team.id
+  team_slug = github_team.team.slug
 
   dynamic "members" {
     for_each = { for member in var.members : member.username => member.role }
