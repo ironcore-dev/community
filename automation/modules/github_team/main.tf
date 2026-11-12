@@ -11,7 +11,9 @@ resource "github_team_members" "members" {
   dynamic "members" {
     for_each = { for member in var.members : member.username => member.role }
     content {
-      username = members.key
+      # lower is needed because of bug https://github.com/integrations/terraform-provider-github/issues/3533
+      # The bug is already fixed, so once an update to v6.13.0 is released we should be able to remove it again
+      username = lower(members.key)
       role     = members.value
     }
   }
