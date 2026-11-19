@@ -1,0 +1,73 @@
+name: TSC Nomination
+description: Nominate a candidate for the upcoming IronCore Technical Steering Committee (TSC) vote
+title: "TSC Nomination: <GitHub handle> for <seat>"
+labels: ["tsc", "election"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to nominate a candidate for the upcoming **Technical Steering Committee (TSC)** election.
+
+        - **Electorate / eligibility:** candidates for an area seat must be members of that area's `*-maintainers` team; the Chair may be any member of a `*-maintainers` team. See the [TSC Structure](https://github.com/ironcore-dev/community/blob/main/docs/steering/tsc-structure.md) for details.
+        - **Candidacy:** self-nomination or nomination by an area maintainer. Each person may stand for at most one position per election cycle (one area seat *or* the Chair).
+        - One nomination per issue, please.
+
+  - type: input
+    id: nominee
+    attributes:
+      label: Nominated candidate
+      description: GitHub handle of the person being nominated (without the @).
+      placeholder: octocat
+    validations:
+      required: true
+
+  - type: dropdown
+    id: seat
+    attributes:
+      label: Seat / position
+      description: Which TSC seat is the candidate nominated for? A candidate may stand for only one position per election cycle.
+      options:
+        - IaaS area representative
+        - Metal area representative
+        - Network area representative
+        - TSC Chair
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affiliation
+    attributes:
+      label: Company affiliation
+      description: Is the candidate affiliated with a company, i.e. being paid for their work on the IronCore project?
+      options:
+        - "Yes: paid by a company to work on IronCore"
+        - "No: contributing in their own time"
+    validations:
+      required: true
+
+  - type: input
+    id: employer
+    attributes:
+      label: Employer / company
+      description: If the candidate is company-affiliated, name the company. Enter "n/a" if unaffiliated.
+      placeholder: e.g. ACME Corp or n/a
+    validations:
+      required: true
+
+  - type: textarea
+    id: contributions
+    attributes:
+      label: Qualifications and contributions
+      description: |
+        Briefly describe why the candidate is a good fit: their contributions to the project, involvement in the topic area, and any relevant experience.
+      placeholder: e.g. maintainer of ironcore-dev/metal-operator since 2024, drove the ...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Confirmation
+      options:
+        - label: The candidate has agreed to this nomination and meets the eligibility requirements for the seat.
+          required: true
