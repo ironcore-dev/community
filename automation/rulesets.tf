@@ -29,9 +29,10 @@ resource "github_organization_ruleset" "default_release" {
     required_linear_history = false
 
     pull_request {
-      required_approving_review_count = 1
-      require_code_owner_review       = true
-      dismiss_stale_reviews_on_push   = true
+      required_approving_review_count   = 1
+      require_code_owner_review         = true
+      dismiss_stale_reviews_on_push     = true
+      required_review_thread_resolution = true
       allowed_merge_methods = [
         "rebase",
         "squash",
