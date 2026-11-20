@@ -28,3 +28,7 @@ jobs:
       - name: Validate tofu
         working-directory: automation
         run: tofu validate
+        env:
+          GITHUB_APP_ID: ${{ vars.TF_APP_ID }}
+          GITHUB_APP_INSTALLATION_ID: ${{ vars.TF_APP_INSTALLATION_ID }}
+          GITHUB_APP_PEM_FILE: ${{ secrets.TF_APP_PEM_FILE }}

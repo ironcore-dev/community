@@ -21,17 +21,6 @@ jobs:
     name: Tofu Plan
     runs-on: ubuntu-latest
     steps:
-      - name: Check GitHub token
-        env:
-          # Repository secret covering only the permissions necessary to refresh
-          # the state.
-          TOFU_PLAN_TOKEN: ${{ secrets.TOFU_PLAN_TOKEN }}
-        run: |
-          if [ -z "$TOFU_PLAN_TOKEN" ]; then
-            echo "::error::secret TOFU_PLAN_TOKEN is not available"
-            exit 1
-          fi
-
       # Reminder: this checks out the base branch because we run with
       # pull_request_target.
       - name: Check out base branch
@@ -79,9 +68,9 @@ jobs:
         id: plan
         working-directory: automation
         env:
-          # github provider auth: the workflow token can't read org data,
-          # so plan needs a token with org read access.
-          GITHUB_TOKEN: ${{ secrets.TOFU_PLAN_TOKEN }}
+          GITHUB_APP_ID: ${{ vars.TF_APP_ID }}
+          GITHUB_APP_INSTALLATION_ID: ${{ vars.TF_APP_INSTALLATION_ID }}
+          GITHUB_APP_PEM_FILE: ${{ secrets.TF_APP_PEM_FILE }}
         run: tofu plan -detailed-exitcode -no-color -input=false -out=plan.tfplan
         continue-on-error: true
 

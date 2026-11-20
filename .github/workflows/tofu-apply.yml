@@ -24,17 +24,6 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Check GitHub token
-        env:
-          # Repository secret covering only the permissions necessary to refresh
-          # the state.
-          TOFU_PLAN_TOKEN: ${{ secrets.TOFU_PLAN_TOKEN }}
-        run: |
-          if [ -z "$TOFU_PLAN_TOKEN" ]; then
-            echo "::error::secret TOFU_PLAN_TOKEN is not available"
-            exit 1
-          fi
-
       - name: Check out code
         uses: actions/checkout@v7
 
@@ -56,9 +45,9 @@ jobs:
         id: plan
         working-directory: automation
         env:
-          # github provider auth: the workflow token can't read org data,
-          # so plan needs a read-only token with org read access.
-          GITHUB_TOKEN: ${{ secrets.TOFU_PLAN_TOKEN }}
+          GITHUB_APP_ID: ${{ vars.TF_APP_ID }}
+          GITHUB_APP_INSTALLATION_ID: ${{ vars.TF_APP_INSTALLATION_ID }}
+          GITHUB_APP_PEM_FILE: ${{ secrets.TF_APP_PEM_FILE }}
         run: tofu plan -detailed-exitcode -no-color -input=false -out=plan.tfplan
         continue-on-error: true
 
@@ -138,7 +127,9 @@ jobs:
         env:
           # Environment secret of the github-org environment covering the
           # permissions necessary to carry out the plan.
-          GITHUB_TOKEN: ${{ secrets.TOFU_APPLY_TOKEN }}
+          GITHUB_APP_ID: ${{ vars.TF_APP_ID }}
+          GITHUB_APP_INSTALLATION_ID: ${{ vars.TF_APP_INSTALLATION_ID }}
+          GITHUB_APP_PEM_FILE: ${{ secrets.TF_APP_PEM_FILE }}
         run: tofu apply -input=false -no-color plan.tfplan
 
       # Always push state, even if apply failed
