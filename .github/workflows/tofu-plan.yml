@@ -40,8 +40,10 @@ jobs:
         # Since the files are cat-ed from a blob any PRs trying to symlink to
         # /proc/self/environ or similar will fail as the cat will just write the
         # link target to a text file.
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          git fetch origin "pull/${{ github.event.pull_request.number }}/head"
+          git fetch origin "pull/${PR_NUMBER}/head"
           if ! tree=$(git merge-tree --write-tree HEAD FETCH_HEAD); then
             echo "::error::PR does not cleanly merge"
             exit 1
