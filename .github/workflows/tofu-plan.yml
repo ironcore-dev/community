@@ -24,7 +24,7 @@ jobs:
       # Reminder: this checks out the base branch because we run with
       # pull_request_target.
       - name: Check out base branch
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
           fetch-depth: 0
@@ -58,7 +58,7 @@ jobs:
           git worktree add .state state
 
       - name: Set up tofu
-        uses: opentofu/setup-opentofu@v2
+        uses: opentofu/setup-opentofu@a1320f892987e89d278cc92dc5adc984fb93aca4 # v2
 
       - name: Init tofu
         working-directory: automation
@@ -81,7 +81,7 @@ jobs:
         continue-on-error: true
 
       - name: Comment plan on PR
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
         env:
           TF_EXITCODE: ${{ steps.plan.outputs.exitcode }}
           TF_PLAN: ${{ steps.show.outputs.stdout}}
